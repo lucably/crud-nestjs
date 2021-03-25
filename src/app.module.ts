@@ -11,6 +11,7 @@ import { Connection } from 'typeorm';
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {
   constructor(private connection: Connection) {}
 }

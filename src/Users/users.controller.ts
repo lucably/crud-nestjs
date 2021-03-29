@@ -25,15 +25,15 @@ export class UsersController {
     }
 
     @Delete(':id')
-    async deleteUser(@Param('id') id: string): Promise<UsersModule> {
-        this.UsersService.remove(id)
-        return `${id} Deletado com Sucesso!`
+    async deleteUser(@Param('id') id: string): Promise<String> {
+       var element = await this.UsersService.remove(id)
+       return element;
     }
-    //Ta com erro
+
     @Put(':id')
-    async update(@Param('id') id: string, @Body() user: Users): Promise<UsersModule> {
-        this.UsersService.update(user,id);
-        return `${id} Editado com Sucesso!`
+    async update(@Body() user: Users, @Param('id') id: string): Promise<String> {
+       var element = await this.UsersService.update(user,id);
+        return element;
     }
 
     @Get('test')

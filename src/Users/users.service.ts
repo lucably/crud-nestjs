@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './user.entity';
+import { throwError } from 'rxjs';
+import { throws } from 'assert';
 
 @Injectable()
 export class UsersService {
@@ -24,21 +26,23 @@ export class UsersService {
     return user;
   }
 
-  //Terminar o update e fazer validações
   async update(user: Users, id: string) {
-    const userElement = this.usersRepository.findOne(id);
-    if(userElement) {
-      (await userElement).firstName = user.firstName;
-      (await userElement).lastName = user.lastName;
-      (await userElement).isActive = user.isActive? user.isActive : (await userElement).isActive;
-      return userElement;
+    var userElement = await this.usersRepository.update(id,user);
+    if(userElement.raw.affectedRows > 0) {
+      return "Usuario Editado";
     } else {
-      return 'Usuario n encontrado!';
+      return "Não Encontrado"
     }
+    
   }
 
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);  
+  async remove(id: string): Promise<String> {
+    var userElement = await this.usersRepository.delete(id);  
+    if(userElement.raw.affectedRows > 0) {
+      return "Deletado com sucesso";
+    } else {
+      return "Erro ao deletar";
+    }
   }
 
   getTestRoute(): String {
